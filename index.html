@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/snow.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <title></title>
+
+    <script>
+        $(document).ready(function(){
+
+            var rand = Math.random();
+
+            function init(cfg) {
+
+                $('body').css('background-color', cfg.bg);
+                $('#capCanvas').remove();
+
+                var k = cfg.w / cfg.h;
+                var h = $(window).height();
+                var w = parseInt(h*k, 10);
+                cfg.ch = h;
+                cfg.cw = w;
+                cfg.cx1 = ($(window).width() - w)/2;
+                cfg.cx2 = cfg.cx1 + w;
+                cfg.cy1 = 0;
+                cfg.cy2 = h;
+                $('#container').height(h);
+                $('#container').width(w);
+                $('#container').css('margin-left', cfg.cx1 + 'px');
+
+                var capCanvasHtml = '<canvas id="capCanvas" class="cap-canvas" width="'+w+'" height="'+h+'"></canvas>'
+                $('#container').append(capCanvasHtml);
+
+                var c = document.getElementById('capCanvas');
+                var ctx = c.getContext('2d');
+                ctx.fillStyle = cfg.bg;
+                ctx.fillRect(0, 0, w, h);
+                Snow.init(250, cfg, ctx);
+            }
+
+            //----------------------------
+            var id = location.search.replace('?', '');
+            var cfg = Config[id];
+            if (typeof cfg != 'undefined') {
+
+                $('.container').html('<img class="image" id="image" src="img/'+cfg.file+'?'+Math.random()+'">')
+
+                $(window).resize(function(){
+                    init(cfg);
+                });
+                init(cfg);
+            } else {
+                $('body').html('<p>Wrong id</p>')
+            }
+        });
+    </script>
+
+</head>
+<body>
+<div class="container" id="container">
+
+</div>
+</body>
+</html>
